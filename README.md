@@ -43,7 +43,7 @@ node index.js
 
 ![image](https://github.com/Tnodes/initia-wallet-generator/assets/83104623/107e86b9-bde2-44e1-af30-e4b1953e568f)
 
-Result
+# Result
 The results are saved in /results as 4 txt files with a separate wallet data type and a table with all results.
 
 # Contribution
