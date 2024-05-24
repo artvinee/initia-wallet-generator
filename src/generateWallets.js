@@ -4,10 +4,8 @@ const xlsx = require('xlsx');
 const path = require('path');
 
 async function generateWallets(numWallets) {
-    // Определяем путь к results в корневой директории проекта
     const resultsDir = path.join(__dirname, '..', 'results');
 
-    // Создаем папку results, если она не существует
     if (!fs.existsSync(resultsDir)) {
         fs.mkdirSync(resultsDir);
     }
