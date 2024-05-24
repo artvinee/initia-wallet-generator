@@ -6,14 +6,14 @@
   | || | | | | |_| | (_| | | |_| |  __/ | | |
  |___|_| |_|_|\__|_|\__,_|  \____|\___|_| |_|
 
-Github: https://github.com/Tnodes
+Github: https://github.com/Tnodes (modded by artvinee)
 ```
 # Initia-wallet-generator
 Node.js script for generating multiple wallets in INITIA Network. It's designed to create wallets with unique addresses, privatekey, publickey and mnemonics.
+The results are saved in /results as 4 txt files with a separate wallet data type and a table with all results.
 
 # Feature
 - Generate unlimitied initia wallet address
-- Extract & Merge Wallet Addresses from File
 
 # Installation
 1. Clone the repository:
