@@ -1,8 +1,24 @@
 const { MnemonicKey } = require('@initia/initia.js');
 const fs = require('fs');
+const xlsx = require('xlsx');
+const path = require('path');
 
-async function generateWallets(numWallets, filePath) {
-    let walletData = '';
+async function generateWallets(numWallets) {
+    // Определяем путь к results в корневой директории проекта
+    const resultsDir = path.join(__dirname, '..', 'results');
+
+    // Создаем папку results, если она не существует
+    if (!fs.existsSync(resultsDir)) {
+        fs.mkdirSync(resultsDir);
+    }
+
+    let addresses = '';
+    let privateKeys = '';
+    let seedPhrases = '';
+    let publicKeys = '';
+
+    const workbook = xlsx.utils.book_new();
+    const worksheetData = [['Address', 'Private Key', 'Seed Phrase', 'Public Key']];
 
     for (let i = 0; i < numWallets; i++) {
         const key = new MnemonicKey({
@@ -11,16 +27,24 @@ async function generateWallets(numWallets, filePath) {
             coinType: 118, // (optional) BIP44 coinType. default = 118
         });
 
-        walletData += `Wallet ${i + 1}:\n`;
-        walletData += `Mnemonic: ${key.mnemonic}\n`;
-        walletData += `Private Key (Hex): ${key.privateKey.toString('hex')}\n`;
-        walletData += `Public Key: ${key.publicKey.key}\n`;
-        walletData += `Wallet Address: ${key.accAddress}\n`;
-        walletData += '-------------------------\n';
+        addresses += `${key.accAddress}\n`;
+        privateKeys += `${key.privateKey.toString('hex')}\n`;
+        seedPhrases += `${key.mnemonic}\n`;
+        publicKeys += `${key.publicKey.key}\n`;
+
+        worksheetData.push([key.accAddress, key.privateKey.toString('hex'), key.mnemonic, key.publicKey.key]);
     }
 
-    fs.writeFileSync(filePath, walletData);
-    console.log(`Wallet data successfully saved to ${filePath}`);
+    fs.writeFileSync(path.join(resultsDir, 'addresses.txt'), addresses);
+    fs.writeFileSync(path.join(resultsDir, 'private_keys.txt'), privateKeys);
+    fs.writeFileSync(path.join(resultsDir, 'seed_phrases.txt'), seedPhrases);
+    fs.writeFileSync(path.join(resultsDir, 'public_keys.txt'), publicKeys);
+
+    const worksheet = xlsx.utils.aoa_to_sheet(worksheetData);
+    xlsx.utils.book_append_sheet(workbook, worksheet, 'Wallets');
+    xlsx.writeFile(workbook, path.join(resultsDir, 'result.xlsx'));
+
+    console.log('Wallet data successfully saved to the results folder.');
 }
 
 module.exports = { generateWallets };
